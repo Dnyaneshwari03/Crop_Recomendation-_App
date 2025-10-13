@@ -3,12 +3,12 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import CropInfo from './pages/CropInfo';
-
 import About from './pages/About';
 import Login from './pages/Login';
 import Layout from './pages/Layout';
 import './App.css';
 import CropPredictor from './pages/CropPredictor';
+import Register from './pages/Register';
 
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
           <Route path="/recommendation" element={<CropPredictor/>} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Route>
       </Routes>
     </div>

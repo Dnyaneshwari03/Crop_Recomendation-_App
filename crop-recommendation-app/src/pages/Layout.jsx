@@ -1,12 +1,12 @@
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaHome, FaSeedling, FaCalendarAlt, FaInfoCircle, FaSignInAlt } from 'react-icons/fa';
-import './Layout.css'; 
+import { FaHome, FaSeedling, FaChartLine, FaInfoCircle, FaSignInAlt } from 'react-icons/fa';
+import './Layout.css';
 
-function Layout ()  {
+function Layout() {
   const navigate = useNavigate();
- 
+
 
   return (
     <>
@@ -20,7 +20,7 @@ function Layout ()  {
             <FaSeedling /> Crop Info
           </motion.button>
           <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={() => navigate('/recommendation')}>
-            <FaCalendarAlt /> Recommendation
+            <FaChartLine /> Recommendation
           </motion.button>
           <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={() => navigate('/about')}>
             <FaInfoCircle /> About Us

@@ -5,14 +5,15 @@ import { FaHome, FaSeedling, FaCalendarAlt, FaInfoCircle, FaSignInAlt } from 're
 import './Home.css';
 import { motion } from 'framer-motion';
 import farm1Img from '/assets/farm1.jpg';
-import farm2Img from '/assets/farm2.jpg';
-import farm3Img from '/assets/farm3.jpg';
-import farm4Img from '/assets/farm4.jpg';
-import farm5Img from '/assets/farm5.jpg';
-import farm6Img from '/assets/farm6.jpg';
+// import farm2Img from '/assets/farm2.jpg';
+// import farm3Img from '/assets/farm3.jpg';
+// import farm4Img from '/assets/farm4.jpg';
+// import farm5Img from '/assets/farm5.jpg';
+// import farm6Img from '/assets/farm6.jpg';
 
-const images = [farm1Img, farm2Img, farm3Img, farm4Img, farm5Img, farm6Img];
+// const images = [farm1Img, farm2Img, farm3Img, farm4Img, farm5Img, farm6Img];
 
+const images = [farm1Img];
 function Home(){
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
