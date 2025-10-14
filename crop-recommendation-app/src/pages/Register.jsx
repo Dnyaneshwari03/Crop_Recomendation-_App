@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import "./Auth.css";
+import "./Auth.css"; // same CSS as login
 
 function Register() {
   const [form, setForm] = useState({
@@ -25,11 +25,8 @@ function Register() {
   const validateForm = () => {
     const newErrors = {};
     if (!form.fullname.trim()) newErrors.fullname = "Full Name is required";
-    if (!form.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-      newErrors.email = "Enter a valid email address";
-    }
+    if (!form.email.trim()) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Enter a valid email address";
 
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&_])[A-Za-z\d@$!%*?#&_]{6,}$/;
@@ -49,137 +46,199 @@ function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!validateForm()) return;
 
-    setLoading(true); // Show loader overlay
+  //   setLoading(true);
 
-    try {
-      const res = await axios.post("http://localhost:5000/api/register", {
-        fullname: form.fullname,
-        email: form.email,
-        password: form.password,
-        address: form.address,
+  //   try {
+  //     const res = await axios.post("http://localhost:5000/api/register", {
+  //       fullname: form.fullname,
+  //       email: form.email,
+  //       password: form.password,
+  //       address: form.address,
+  //     });
+
+  //     toast.success("Registration successful! Please login.");
+
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //       setForm({
+  //         fullname: "",
+  //         email: "",
+  //         password: "",
+  //         confirmPassword: "",
+  //         address: "",
+  //       });
+
+  //       setTimeout(() => {
+  //         navigate("/login");
+  //       }, 2000);
+  //     }, 2000);
+  //   } catch (err) {
+  //     setLoading(false);
+  //     toast.error(err.response?.data?.message || "Server error");
+  //   }
+  // };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
+
+  setLoading(true);
+
+  try {
+    const res = await axios.post("http://localhost:5000/api/register", {
+      fullname: form.fullname,
+      email: form.email,
+      password: form.password,
+      address: form.address,
+    });
+
+    // Keep loader for 2 seconds before hiding
+    setTimeout(() => {
+      setLoading(false); // Hide loader
+      toast.success("Registration successful! Please login."); // Show toast
+
+      // Reset form
+      setForm({
+        fullname: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        address: "",
       });
 
-      // Keep loader visible for a bit longer for nice effect
+      // Redirect after 2 seconds
       setTimeout(() => {
-        setLoading(false); // Hide loader
-        toast.success("Registration successful! Please login.");
-        setForm({
-          fullname: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          address: "",
-        });
+        navigate("/login");
+      }, 2000);
+    }, 3000); // 2 seconds delay
+  } catch (err) {
+    setLoading(false);
+    toast.error(err.response?.data?.message || "Server error");
+  }
+};
 
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-      }, 20000); // Loader visible for 2 seconds
-    } catch (err) {
-      setLoading(false);
-      toast.error(err.response?.data?.message || "Server error");
-    }
-  };
-
+  
   return (
-    <div className="auth-container">
-      <Toaster position="top-center" reverseOrder={false} />
+    <div className="page">
+      <div className="auth-container register-container">
+        <Toaster position="top-center" reverseOrder={false} />
 
-      {loading && (
-        <div className="center-loader">
-          <div className="leaf-loader">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="leaf"
-                style={{ transform: `rotate(${i * 72}deg) translateX(6px)` }} // smaller radius
-              >
-                🍃
-              </div>
-            ))}
+        {loading && (
+          <div className="center-loader">
+            <div className="leaf-loader">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className="leaf"
+                  style={{ transform: `rotate(${i * 72}deg) translateX(6px)` }}
+                >
+                  🍃
+                </div>
+              ))}
+            </div>
+            <p className="loader-text">🌱 Registering...</p>
           </div>
-          <p className="loader-text">🌱 Registering...</p>
-        </div>
-      )}
+        )}
 
+        <h2>Register</h2>
+        <form onSubmit={handleSubmit} className="auth-form">
 
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="fullname">Full Name</label>
+              <input
+                type="text"
+                name="fullname"
+                id="fullname"
+                placeholder="Enter your full name"
+                value={form.fullname}
+                onChange={handleChange}
+              />
+              {errors.fullname && <p className="message">{errors.fullname}</p>}
+            </div>
 
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter your email"
+                value={form.email}
+                onChange={handleChange}
+              />
+              {errors.email && <p className="message">{errors.email}</p>}
+            </div>
+          </div>
 
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter your password"
+                value={form.password}
+                onChange={handleChange}
+              />
+              {errors.password && <p className="message">{errors.password}</p>}
+            </div>
 
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                placeholder="Confirm your password"
+                value={form.confirmPassword}
+                onChange={handleChange}
+              />
+              {errors.confirmPassword && <p className="message">{errors.confirmPassword}</p>}
+            </div>
+          </div>
 
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit} className="auth-form">
-        <div className="form-group">
-          <input
-            type="text"
-            name="fullname"
-            placeholder="Full Name"
-            value={form.fullname}
-            onChange={handleChange}
-          />
-          {errors.fullname && <p className="error-message">{errors.fullname}</p>}
-        </div>
+          <div className="form-row">
+            <div className="form-group full-width">
+              <label htmlFor="address">Address</label>
+              <input
+                type="text"
+                name="address"
+                id="address"
+                placeholder="Enter your address"
+                value={form.address}
+                onChange={handleChange}
+              />
+              {errors.address && <p className="message">{errors.address}</p>}
+            </div>
+          </div>
 
-        <div className="form-group">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-          />
-          {errors.email && <p className="error-message">{errors.email}</p>}
-        </div>
+          <button type="submit" disabled={loading}>
+            Register
+          </button>
+        </form>
 
-        <div className="form-group">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-          />
-          {errors.password && <p className="error-message">{errors.password}</p>}
-        </div>
-
-        <div className="form-group">
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={form.confirmPassword}
-            onChange={handleChange}
-          />
-          {errors.confirmPassword && (
-            <p className="error-message">{errors.confirmPassword}</p>
-          )}
-        </div>
-
-        <div className="form-group">
-          <input
-            type="text"
-            name="address"
-            placeholder="Address"
-            value={form.address}
-            onChange={handleChange}
-          />
-          {errors.address && <p className="error-message">{errors.address}</p>}
-        </div>
-
-        <button type="submit" disabled={loading}>
-          Register
-        </button>
-      </form>
-
-      <p className="login-link">
-        Already have an account? <Link to="/login">Login</Link>
-      </p>
+        <p className="register-link">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
     </div>
   );
 }
 
 export default Register;
+
+
+
+
+
+
+
+
+
+
